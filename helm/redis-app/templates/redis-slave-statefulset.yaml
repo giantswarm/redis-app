@@ -88,18 +88,18 @@ spec:
           useradd redis
           chown -R redis {{ .Values.slave.persistence.path }}
           {{- end }}
-          if [[ -n $REDIS_PASSWORD_FILE ]]; then
+          if [[ `[[ -n $REDIS_PASSWORD_FILE ]]` ]]; then
             password_aux=`cat ${REDIS_PASSWORD_FILE}`
             export REDIS_PASSWORD=$password_aux
           fi
-          if [[ -n $REDIS_MASTER_PASSWORD_FILE ]]; then
+          if [[ `[[ -n $REDIS_MASTER_PASSWORD_FILE ]]` ]]; then
             password_aux=`cat ${REDIS_MASTER_PASSWORD_FILE}`
             export REDIS_MASTER_PASSWORD=$password_aux
           fi
-          if [[ ! -f /opt/bitnami/redis/etc/replica.conf ]];then
+          if [[ `[[ ! -f /opt/bitnami/redis/etc/replica.conf ]]` ]];then
             cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
           fi
-          if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
+          if [[ `[[ ! -f /opt/bitnami/redis/etc/redis.conf ]]` ]];then
             cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
           fi
           ARGS=("--port" "${REDIS_PORT}")
@@ -218,11 +218,11 @@ spec:
         - /bin/bash
         - -c
         - |
-          if [[ -n $REDIS_PASSWORD_FILE ]]; then
+          if [[ `[[ -n $REDIS_PASSWORD_FILE ]]` ]]; then
             password_aux=`cat ${REDIS_PASSWORD_FILE}`
             export REDIS_PASSWORD=$password_aux
           fi
-          if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]];then
+          if [[ `[[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]` ]];then
             cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
             {{- if .Values.usePassword }}
             printf "\nsentinel auth-pass {{ .Values.sentinel.masterSet }} $REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
@@ -302,7 +302,7 @@ spec:
         - /bin/bash
         - -c
         - |
-          if [[ -f '/secrets/redis-password' ]]; then
+          if [[ `[[ -f '/secrets/redis-password' ]]` ]]; then
            export REDIS_PASSWORD=$(cat /secrets/redis-password)
           fi
           redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}

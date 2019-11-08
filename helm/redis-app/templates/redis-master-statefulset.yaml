@@ -82,14 +82,14 @@ spec:
           useradd redis
           chown -R redis {{ .Values.master.persistence.path }}
           {{- end }}
-          if [[ -n $REDIS_PASSWORD_FILE ]]; then
+          if [[ `[[ -n $REDIS_PASSWORD_FILE ]]` ]]; then
             password_aux=`cat ${REDIS_PASSWORD_FILE}`
             export REDIS_PASSWORD=$password_aux
           fi
-          if [[ ! -f /opt/bitnami/redis/etc/master.conf ]];then
+          if [[ `[[ ! -f /opt/bitnami/redis/etc/master.conf ]]` ]];then
             cp /opt/bitnami/redis/mounted-etc/master.conf /opt/bitnami/redis/etc/master.conf
           fi
-          if [[ ! -f /opt/bitnami/redis/etc/redis.conf ]];then
+          if [[ `[[ ! -f /opt/bitnami/redis/etc/redis.conf ]]` ]];then
             cp /opt/bitnami/redis/mounted-etc/redis.conf /opt/bitnami/redis/etc/redis.conf
           fi
           ARGS=("--port" "${REDIS_PORT}")
@@ -188,11 +188,11 @@ spec:
         - /bin/bash
         - -c
         - |
-          if [[ -n $REDIS_PASSWORD_FILE ]]; then
+          if [[ `[[ -n $REDIS_PASSWORD_FILE ]]` ]]; then
             password_aux=`cat ${REDIS_PASSWORD_FILE}`
             export REDIS_PASSWORD=$password_aux
           fi
-          if [[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]];then
+          if [[ `[[ ! -f /opt/bitnami/redis-sentinel/etc/sentinel.conf ]]` ]];then
             cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
             {{- if .Values.usePassword }}
             printf "\nsentinel auth-pass {{ .Values.sentinel.masterSet }} $REDIS_PASSWORD" >> /opt/bitnami/redis-sentinel/etc/sentinel.conf
@@ -276,7 +276,7 @@ spec:
         - /bin/bash
         - -c
         - |
-          if [[ -f '/secrets/redis-password' ]]; then
+          if [[ `[[ -f '/secrets/redis-password' ]]` ]]; then
            export REDIS_PASSWORD=$(cat /secrets/redis-password)
           fi
           redis_exporter{{- range $key, $value := .Values.metrics.extraArgs }} --{{ $key }}={{ $value }}{{- end }}
