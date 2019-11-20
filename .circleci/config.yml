@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@0.4.3
+  architect: giantswarm/architect@0.4.4
 
 workflows:
   package-and-push-chart-on-tag:
@@ -9,7 +9,7 @@ workflows:
           name: "package and push redis chart"
           app_catalog: "giantswarm-incubator-catalog"
           app_catalog_test: "giantswarm-incubator-test-catalog"
-          chart: "redis"
+          chart: "redis-app"
           # Trigger job on git tag.
           filters:
             tags:
